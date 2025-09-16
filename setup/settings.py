@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'autenticacao'  
+    'autenticacao'
 ]
 
 MIDDLEWARE = [
@@ -52,6 +52,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+from django.contrib.messages import constants as messages
+
+MESSAGES_TAGS = {
+  messages.ERROR == 'danger',
+}
+
 
 ROOT_URLCONF = 'setup.urls'
 

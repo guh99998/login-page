@@ -30,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
 
 # Application definition
 
@@ -40,7 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'autenticacao'
+    'autenticacao',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 from django.contrib.messages import constants as messages
@@ -72,9 +81,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'setup.wsgi.application'
@@ -137,3 +152,35 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': str(os.getenv('CLIENT_ID_GOOGLE')),
+            'secret': str(os.getenv('SECRET_KEY_GOOGLE')),
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },
+    'github': {
+        'APP': {
+            'client_id': str(os.getenv('CLIENT_ID_GITHUB')),
+            'secret': str(os.getenv('SECRET_KEY_GITHUB')),
+            'key': ''
+        }
+    }
+}
+
+LOGIN_REDIRECT_URL = '/members'
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+ACCOUNT_LOGOUT_ON_GET = True
+
+LOGOUT_REDIRECT_URL = '/'

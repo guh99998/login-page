@@ -1,6 +1,8 @@
 from django.urls import path
-from autenticacao.views import index
+from autenticacao.views import login, singup, members
 
 urlpatterns = [
-  path('', index, name='index'),
+  path('', login, name='login'),
+  path('cadastro', singup, name='singup'),
+  path('members/', members, name='members')
 ]
